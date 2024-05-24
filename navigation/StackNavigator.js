@@ -1,5 +1,3 @@
-// navigation/StackNavigator.js
-
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
@@ -12,6 +10,7 @@ import SenhaScreen from '../screens/SenhaScreen';
 import CalculoIMC from '../screens/CalculoIMC';
 import PressaoScreen from '../screens/PressaoScreen';
 import GlicemiaScreen from '../screens/GlicemiaScreen';
+import MedicamentosScreen from '../screens/MedicamentosScreen';
 const Stack = createStackNavigator();
 
 export default function StackNavigator() {
@@ -27,6 +26,7 @@ export default function StackNavigator() {
       <Stack.Screen name="CalculoIMC" component={CalculoIMC} options={{ headerShown: false }} />
       <Stack.Screen name="PressaoArterial" component={PressaoScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Glicemia" component={GlicemiaScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Medicamentos" component={MedicamentosScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

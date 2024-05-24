@@ -23,7 +23,6 @@ export default function HomeScreen({ navigation }) {
   const [lastData, setLastData] = useState({});
 
   useEffect(() => {
-
     setLastData({
       consulta: lastConsulta,
       glicemia: lastGlicemia,
@@ -54,7 +53,7 @@ export default function HomeScreen({ navigation }) {
             <Image source={require('../assets/images/consultas.png')} style={styles.categoryImage} />
             <Text style={styles.categoryText}>Consultas</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryItem}>
+          <TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate('Medicamentos')}>
             <Image source={require('../assets/images/medicamentos.png')} style={styles.categoryImage} />
             <Text style={styles.categoryText}>Medicamentos</Text>
           </TouchableOpacity>
