@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal, Button } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal, Button, Image} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function MedicamentosScreen({ navigation }) {
   const [medicamentosEntries, setMedicamentosEntries] = useState([]);
@@ -12,31 +12,58 @@ export default function MedicamentosScreen({ navigation }) {
     time: ''
   });
 
+  const loadMedicamentos = async () => {
+    try {
+      const medicamentos = await AsyncStorage.getItem('medicamentos');
+      if (medicamentos !== null) {
+        setMedicamentosEntries(JSON.parse(medicamentos));
+      }
+    } catch (error) {
+      console.error('Erro ao carregar medicamentos:', error);
+    }
+  };
+
+  const saveMedicamentos = async (medicamentos) => {
+    try {
+      await AsyncStorage.setItem('medicamentos', JSON.stringify(medicamentos));
+    } catch (error) {
+      console.error('Erro ao salvar medicamentos:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadMedicamentos();
+  }, []);
+
   const handleAddMedicamento = () => {
-    setMedicamentosEntries([
+    const updatedMedicamentos = [
       ...medicamentosEntries,
       { id: Date.now().toString(), ...newMedicamento }
-    ]);
+    ];
+    setMedicamentosEntries(updatedMedicamentos);
+    saveMedicamentos(updatedMedicamentos);
     setNewMedicamento({ medicamento: '', date: '', time: '' });
     setModalVisible(false);
   };
 
   const handleDeleteMedicamento = (id) => {
-    setMedicamentosEntries(medicamentosEntries.filter(entry => entry.id !== id));
+    const updatedMedicamentos = medicamentosEntries.filter(entry => entry.id !== id);
+    setMedicamentosEntries(updatedMedicamentos);
+    saveMedicamentos(updatedMedicamentos);
     setSelectedMedicamento(null);
   };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.item} onPress={() => setSelectedMedicamento(item)}>
       <Text style={styles.itemText}>{item.medicamento}</Text>
-      <Ionicons name="chevron-forward" size={20} color="#000" />
+      <Text style={styles.chevron}>{'>'}</Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={24} color="#61A186" />
+        <Image source={require('../assets/images/back.png')} style={styles.icon} />
       </TouchableOpacity>
       <Text style={styles.title}>Medicamentos</Text>
       <FlatList
@@ -46,7 +73,7 @@ export default function MedicamentosScreen({ navigation }) {
         style={styles.list}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
-        <Ionicons name="add" size={30} color="#FFF" />
+        <Image source={require('../assets/images/add.png')} style={styles.icon} />
       </TouchableOpacity>
 
       <Modal
@@ -112,7 +139,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 60,
     backgroundColor: '#fff',
-    marginTop: 50
+    borderTopWidth: 50, 
+    borderTopColor: 'transparent',
   },
   backButton: {
     position: 'absolute',
@@ -141,6 +169,10 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 18,
   },
+  chevron: {
+    fontSize: 20,
+    color: '#000',
+  },
   addButton: {
     position: 'absolute',
     bottom: 30,
@@ -151,6 +183,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#61A186',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  icon: {
+    width: 30,
+    height: 30,
   },
   modalContainer: {
     flex: 1,

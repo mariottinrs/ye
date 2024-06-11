@@ -22,6 +22,17 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ],
+    "developer": {
+      "tool": "react-native"
+    },
+    "packagerOpts": {
+      "devClient": false,
+      "ignoreWarnings": true
+    },
+    "logLevel": "silent"
   }
 }

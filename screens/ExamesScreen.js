@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#D9D9D9",
         borderRadius: 10,
         margin:10,
-        marginTop: 100
+        borderTopWidth: 50, 
+        borderTopColor: 'transparent',
     },
     itemContainer: {
         flexDirection: 'row',

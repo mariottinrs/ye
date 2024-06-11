@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#fff',
-    marginTop: 50,
+    borderTopWidth: 50, 
+    borderTopColor: 'transparent',
   },
   header: {
     flexDirection: 'row',

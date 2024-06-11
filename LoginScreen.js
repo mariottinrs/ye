@@ -1,17 +1,33 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, BackHandler, Modal } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogin = () => {
     // Lógica de login aqui (opcional)
     navigation.navigate('Home');
   };
 
+  const handleExit = () => {
+    BackHandler.exitApp();
+  };
+
+  const handleConfirmExit = () => {
+    setModalVisible(true);
+  };
+
+  const handleCancelExit = () => {
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.exitButton} onPress={handleConfirmExit}>
+        <Image source={require('./assets/images/exit.png')} style={styles.exitIcon} />
+      </TouchableOpacity>
       <Image source={require('./assets/images/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Acesse</Text>
       <Text style={styles.subtitle}>com e-mail e senha para entrar</Text>
@@ -58,6 +74,27 @@ export default function LoginScreen({ navigation }) {
       </View>
 
       <Text style={styles.versionText}>versão 1.0.0</Text>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleCancelExit}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Você realmente quer sair do aplicativo?</Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity style={styles.modalButton} onPress={handleExit}>
+                <Text style={styles.modalButtonText}>Sim</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.modalButton} onPress={handleCancelExit}>
+                <Text style={styles.modalButtonText}>Não</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -68,7 +105,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
     backgroundColor: '#fff',
-    marginTop: 50
+    borderTopWidth: 50, 
+    borderTopColor: 'transparent',
+  },
+  exitButton: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+  },
+  exitIcon: {
+    width: 24,
+    height: 24,
   },
   logo: {
     width: 100,
@@ -145,7 +192,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   socialButton: {
-    // backgroundColor: '#f5f5f5',
     padding: 10,
     borderRadius: 5,
     marginHorizontal: 10,
@@ -154,12 +200,46 @@ const styles = StyleSheet.create({
   socialButtonImage: {
     width: 50,
     height: 50,
-    // resizeMode: 'contain',
   },
   versionText: {
     fontSize: 12,
     color: '#7D7D7D',
     textAlign: 'center',
-    marginTop:120
+    marginTop: 120
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalView: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    marginHorizontal: 10,
+    backgroundColor: '#5E9A81',
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });

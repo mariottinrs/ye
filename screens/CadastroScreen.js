@@ -12,6 +12,9 @@ export default function CadastroScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.backButtonText}>←</Text>
+      </TouchableOpacity>
       <Text style={styles.title}>Cadastre</Text>
       <Text style={styles.subtitle}>seu nome, e-mail e crie sua senha</Text>
       
@@ -37,16 +40,16 @@ export default function CadastroScreen({ navigation }) {
         onChangeText={setEmail}
       />
 
-        <View style={styles.passwordContainer}>
+      <View style={styles.passwordContainer}>
         <TextInput
           style={styles.inputPassword}
           placeholder="Digite sua senha"
           secureTextEntry={!showPassword}
-          value={repetirSenha}
-          onChangeText={setRepetirSenha}
+          value={senha}
+          onChangeText={setSenha}
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-          <AntDesign name={showPassword ? "eyeo" : "eye"} size={24} color="black" padding={12} />
+          <AntDesign name={showPassword ? "eyeo" : "eye"} size={24} color="black" />
         </TouchableOpacity>
       </View>
 
@@ -59,7 +62,7 @@ export default function CadastroScreen({ navigation }) {
           onChangeText={setRepetirSenha}
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-          <AntDesign name={showPassword ? "eyeo" : "eye"} size={24} color="black" padding={12} />
+          <AntDesign name={showPassword ? "eyeo" : "eye"} size={24} color="black" />
         </TouchableOpacity>
       </View>
 
@@ -88,14 +91,24 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 25,
     backgroundColor: '#FFF',
-    marginTop: 50
+    borderTopWidth: 50, 
+    borderTopColor: 'transparent',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+  },
+  backButtonText: {
+    fontSize: 24,
+    color: '#000',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#5E9A81',
     marginBottom: 10,
-    marginTop:50
+    marginTop: 50,
   },
   subtitle: {
     fontSize: 16,
@@ -143,7 +156,7 @@ const styles = StyleSheet.create({
     color: '#7D7D7D',
     textAlign: 'center',
     marginBottom: 20,
-    marginTop: 25
+    marginTop: 25,
   },
   socialButtonsContainer: {
     flexDirection: 'row',
@@ -156,12 +169,12 @@ const styles = StyleSheet.create({
   socialIcon: {
     width: 50,
     height: 50,
-    marginTop: 0
+    marginTop: 0,
   },
   versionText: {
     fontSize: 12,
     color: '#7D7D7D',
     textAlign: 'center',
-    marginTop:120
+    marginTop: 120,
   },
 });

@@ -11,11 +11,22 @@ import CalculoIMC from '../screens/CalculoIMC';
 import PressaoScreen from '../screens/PressaoScreen';
 import GlicemiaScreen from '../screens/GlicemiaScreen';
 import MedicamentosScreen from '../screens/MedicamentosScreen';
+import Introducao1 from '../screens/Introducao1';
+import Introducao2 from '../screens/Introducao2';
+import Introducao3 from '../screens/Introducao3';
+import Introducao4 from '../screens/Introducao4'; 
+import Introducao5 from '../screens/Introducao5'; 
+
 const Stack = createStackNavigator();
 
 export default function StackNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="Intro1">
+      <Stack.Screen name="Intro1" component={Introducao1} options={{ headerShown: false }} />
+      <Stack.Screen name="Intro2" component={Introducao2} options={{ headerShown: false }} />
+      <Stack.Screen name="Intro3" component={Introducao3} options={{ headerShown: false }} />
+      <Stack.Screen name="Intro4" component={Introducao4} options={{ headerShown: false }} />
+      <Stack.Screen name="Intro5" component={Introducao5} options={{ headerShown: false }} />
       <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Afericoes" component={AfericoesScreen} options={{ headerShown: false }} />

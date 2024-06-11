@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function SenhaScreen({ navigation }) {
   const [email, setEmail] = useState('');
 
   const handleSendCode = () => {
-    console.log('Código enviado para:', email);
+    try {
+      console.log('Código enviado para:', email);
+    } catch (error) {
+      console.error('Erro ao enviar código:', error);
+    }
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={24} color="#000" />
+        <Text style={styles.backButtonText}>←</Text>
       </TouchableOpacity>
       <Image source={require('../assets/images/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Redefinir Senha</Text>
@@ -40,12 +43,17 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 275,
     backgroundColor: '#fff',
-    marginTop: 50
+    borderTopWidth: 50, 
+    borderTopColor: 'transparent',
   },
   backButton: {
     position: 'absolute',
     top: 40,
     left: 20,
+  },
+  backButtonText: {
+    fontSize: 24,
+    color: '#000',
   },
   logo: {
     width: 100,

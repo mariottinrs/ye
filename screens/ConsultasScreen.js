@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal, Button } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal, Button, Image} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function ConsultasScreen({ navigation }) {
   const [consultasEntries, setConsultasEntries] = useState([]);
@@ -12,31 +13,57 @@ export default function ConsultasScreen({ navigation }) {
     time: ''
   });
 
+  const loadConsultas = async () => {
+    try {
+      const consultas = await AsyncStorage.getItem('consultas');
+      if (consultas !== null) {
+        setConsultasEntries(JSON.parse(consultas));
+      }
+    } catch (error) {
+      console.error('Erro ao carregar consultas:', error);
+    }
+  };
+
+  const saveConsultas = async (consultas) => {
+    try {
+      await AsyncStorage.setItem('consultas', JSON.stringify(consultas));
+    } catch (error) {
+      console.error('Erro ao salvar consultas:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadConsultas();
+  }, []);
+
   const handleAddConsulta = () => {
-    setConsultasEntries([
+    const updatedConsultas = [
       ...consultasEntries,
       { id: Date.now().toString(), ...newConsulta }
-    ]);
+    ];
+    setConsultasEntries(updatedConsultas);
+    saveConsultas(updatedConsultas);
     setNewConsulta({ consulta: '', date: '', time: '' });
     setModalVisible(false);
   };
 
   const handleDeleteConsulta = (id) => {
-    setConsultasEntries(consultasEntries.filter(entry => entry.id !== id));
+    const updatedConsultas = consultasEntries.filter(entry => entry.id !== id);
+    setConsultasEntries(updatedConsultas);
+    saveConsultas(updatedConsultas);
     setSelectedConsulta(null);
   };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.item} onPress={() => setSelectedConsulta(item)}>
       <Text style={styles.itemText}>{item.consulta}</Text>
-      <Ionicons name="chevron-forward" size={20} color="#000" />
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={24} color="#61A186" />
+        <Image source={require('../assets/images/back.png')} style={styles.icon} />
       </TouchableOpacity>
       <Text style={styles.title}>Consultas</Text>
       <FlatList
@@ -46,7 +73,7 @@ export default function ConsultasScreen({ navigation }) {
         style={styles.list}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
-        <Ionicons name="add" size={30} color="#FFF" />
+        <Image source={require('../assets/images/add.png')} style={styles.icon} />
       </TouchableOpacity>
 
       <Modal
@@ -76,8 +103,10 @@ export default function ConsultasScreen({ navigation }) {
               value={newConsulta.time}
               onChangeText={(text) => setNewConsulta({ ...newConsulta, time: text })}
             />
-            <Button title="Adicionar" onPress={handleAddConsulta} />
-            <Button title="Cancelar" onPress={() => setModalVisible(false)} />
+            <View style={styles.modalButtons}>
+              <Button title="Adicionar" onPress={handleAddConsulta} />
+              <Button title="Cancelar" onPress={() => setModalVisible(false)} />
+            </View>
           </View>
         </View>
       </Modal>
@@ -96,8 +125,10 @@ export default function ConsultasScreen({ navigation }) {
                 <Text>Consulta: {selectedConsulta.consulta}</Text>
                 <Text>Data: {selectedConsulta.date}</Text>
                 <Text>Hora: {selectedConsulta.time}</Text>
-                <Button title="Excluir" onPress={() => handleDeleteConsulta(selectedConsulta.id)} />
-                <Button title="Fechar" onPress={() => setSelectedConsulta(null)} />
+                <View style={styles.modalButtons}>
+                  <Button title="Excluir" onPress={() => handleDeleteConsulta(selectedConsulta.id)} />
+                  <Button title="Fechar" onPress={() => setSelectedConsulta(null)} />
+                </View>
               </>
             )}
           </View>
@@ -112,7 +143,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 60,
     backgroundColor: '#fff',
-    marginTop: 50
+    borderTopWidth: 50, 
+    borderTopColor: 'transparent',
   },
   backButton: {
     position: 'absolute',
@@ -152,6 +184,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  icon: {
+    width: 30,
+    height: 30,
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -177,5 +213,10 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
     marginBottom: 10,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
   },
 });

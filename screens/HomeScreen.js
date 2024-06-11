@@ -1,44 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-
-const lastConsulta = {
-  consulta: 'Cardiologista',
-  date: '20/05/2024',
-  time: '10:00',
-};
-
-const lastGlicemia = {
-  glicemia: '120 mg/dL',
-  date: '21/05/2024',
-  time: '08:00',
-};
-
-const lastPressao = {
-  pressao: '120/80 mmHg',
-  date: '22/05/2024',
-  time: '09:00',
-};
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert,Image } from 'react-native';
 
 export default function HomeScreen({ navigation }) {
-  const [lastData, setLastData] = useState({});
-
-  useEffect(() => {
-    setLastData({
-      consulta: lastConsulta,
-      glicemia: lastGlicemia,
-      pressao: lastPressao,
-    });
-  }, []);
+  const handleBackPress = () => {
+    Alert.alert(
+      "Confirmar Saída",
+      "Você deseja sair do Aplicativo?",
+      [
+        {
+          text: "Voltar",
+          onPress: () => console.log("Voltar Pressionado"),
+          style: "cancel"
+        },
+        {
+          text: "Confirmar",
+          onPress: () => navigation.navigate('Login')
+        }
+      ],
+      { cancelable: false }
+    );
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.menuButton}>
-          <Text style={styles.menuText}>☰</Text>
+        <TouchableOpacity style={styles.menuButton} onPress={handleBackPress}>
+          <Text style={styles.menuText}>←</Text>
         </TouchableOpacity>
         <View style={styles.headerContent}>
           <Text style={styles.greeting}>Olá,</Text>
-          <Text style={styles.username}>Murilo Orsi</Text>
+          <Text style={styles.username}>Bem Vindo</Text>
           <Text style={styles.subtitle}>
             YE Gestão de Saúde irá te ajudar a melhorar seu controle de exames, aferições e medicamentos
           </Text>
@@ -68,22 +59,11 @@ export default function HomeScreen({ navigation }) {
         </View>
       </View>
 
-      <View style={styles.otherOptions}>
-        <TouchableOpacity style={styles.optionItem}>
-          <Text style={styles.optionText}>
-            Última Consulta: {lastData.consulta ? `${lastData.consulta.consulta} em ${lastData.consulta.date} às ${lastData.consulta.time}` : 'Nenhuma consulta registrada'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.optionItem}>
-          <Text style={styles.optionText}>
-            Último Índice Glicêmico: {lastData.glicemia ? `${lastData.glicemia.glicemia} em ${lastData.glicemia.date} às ${lastData.glicemia.time}` : 'Nenhuma glicemia registrada'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.optionItem}>
-          <Text style={styles.optionText}>
-            Última Pressão: {lastData.pressao ? `${lastData.pressao.pressao} em ${lastData.pressao.date} às ${lastData.pressao.time}` : 'Nenhuma pressão registrada'}
-          </Text>
-        </TouchableOpacity>
+      <View style={styles.warningContainer}>
+        <Image source={require('../assets/images/lightbulb.png')} style={styles.warningIcon} />
+        <Text style={styles.warningText}>
+        Agende consultas regularmente, gerencie seus medicamentos, monitore indicadores de saúde e acompanhe os resultados de exames. Ao manter esses aspectos sob controle, você está investindo no seu bem-estar e prevenindo complicações futuras. Priorize sua saúde, consulte seu médico regularmente e siga suas orientações para uma vida mais saudável e equilibrada.
+        </Text>
       </View>
     </ScrollView>
   );
@@ -93,7 +73,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    marginTop: 50
+    borderTopWidth: 50, 
+    borderTopColor: '#61A186',
   },
   header: {
     backgroundColor: '#61A186',
@@ -142,28 +123,32 @@ const styles = StyleSheet.create({
   categories: {
     paddingHorizontal: 20,
     paddingVertical: 20,
+    alignItems: 'center', // Centraliza o conteúdo horizontalmente
   },
   categoryTitle: {
-    fontSize: 18,
+    fontSize: 21,
     fontWeight: 'bold',
     marginBottom: 10,
+    padding: 20,
+    // color: '#61A186'
   },
   categoryGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between', // Espaço entre os itens
   },
   categoryItem: {
-    width: '48%',
+    width: '45%', 
+    height: 140, 
     backgroundColor: '#E0E0E0',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 20,
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 20,
   },
   categoryImage: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     marginBottom: 10,
   },
   categoryText: {
@@ -171,16 +156,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  otherOptions: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  warningContainer: {
+    alignItems: 'center',
+    backgroundColor: '#fff3f3',
+    padding: 15,
+    borderRadius: 5,
+    borderColor: '#f5c6cb',
+    borderWidth: 1,
+    marginTop: 0,
+    maxWidth: '90%', 
+    alignSelf: 'center',
   },
-  optionItem: {
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+  warningIcon: {
+    width: 24,
+    height: 24,
+    marginBottom: 10,
   },
-  optionText: {
-    fontSize: 16,
+  warningText: {
+    color: '#721c24',
+    fontSize: 14,
+    textAlign: 'center',
   },
 });

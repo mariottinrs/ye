@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal, Button } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal, Button, Image} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function GlicemiaScreen({ navigation }) {
   const [glicemiaEntries, setGlicemiaEntries] = useState([]);
@@ -12,31 +12,57 @@ export default function GlicemiaScreen({ navigation }) {
     time: ''
   });
 
+  const loadGlicemiaEntries = async () => {
+    try {
+      const glicemia = await AsyncStorage.getItem('glicemia');
+      if (glicemia !== null) {
+        setGlicemiaEntries(JSON.parse(glicemia));
+      }
+    } catch (error) {
+      console.error('Erro ao carregar glicemia:', error);
+    }
+  };
+
+  const saveGlicemiaEntries = async (glicemia) => {
+    try {
+      await AsyncStorage.setItem('glicemia', JSON.stringify(glicemia));
+    } catch (error) {
+      console.error('Erro ao salvar glicemia:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadGlicemiaEntries();
+  }, []);
+
   const handleAddGlicemia = () => {
-    setGlicemiaEntries([
+    const updatedGlicemiaEntries = [
       ...glicemiaEntries,
       { id: Date.now().toString(), ...newGlicemia }
-    ]);
+    ];
+    setGlicemiaEntries(updatedGlicemiaEntries);
+    saveGlicemiaEntries(updatedGlicemiaEntries);
     setNewGlicemia({ glicemia: '', date: '', time: '' });
     setModalVisible(false);
   };
 
   const handleDeleteGlicemia = (id) => {
-    setGlicemiaEntries(glicemiaEntries.filter(entry => entry.id !== id));
+    const updatedGlicemiaEntries = glicemiaEntries.filter(entry => entry.id !== id);
+    setGlicemiaEntries(updatedGlicemiaEntries);
+    saveGlicemiaEntries(updatedGlicemiaEntries);
     setSelectedGlicemia(null);
   };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.item} onPress={() => setSelectedGlicemia(item)}>
       <Text style={styles.itemText}>{item.glicemia}</Text>
-      <Ionicons name="chevron-forward" size={20} color="#000" />
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={24} color="#61A186" />
+        <Image source={require('../assets/images/back.png')} style={styles.icon} />
       </TouchableOpacity>
       <Text style={styles.title}>Glicemia</Text>
       <FlatList
@@ -46,7 +72,7 @@ export default function GlicemiaScreen({ navigation }) {
         style={styles.list}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
-        <Ionicons name="add" size={30} color="#FFF" />
+        <Image source={require('../assets/images/add.png')} style={styles.icon} />
       </TouchableOpacity>
 
       <Modal
@@ -112,7 +138,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 60,
     backgroundColor: '#fff',
-    marginTop: 50
+    borderTopWidth: 50, 
+    borderTopColor: 'transparent',
   },
   backButton: {
     position: 'absolute',
@@ -152,6 +179,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  icon: {
+    width: 30,
+    height: 30,
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -178,4 +209,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   },
-});
+}); 
