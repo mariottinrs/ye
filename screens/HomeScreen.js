@@ -1,5 +1,6 @@
+// No HomeScreen
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert,Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Image } from 'react-native';
 
 export default function HomeScreen({ navigation }) {
   const handleBackPress = () => {
@@ -52,7 +53,7 @@ export default function HomeScreen({ navigation }) {
             <Image source={require('../assets/images/afericoes.png')} style={styles.categoryImage} />
             <Text style={styles.categoryText}>Aferições</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate('Exames')}>
+          <TouchableOpacity style={styles.categoryItem} onPress={() => navigation.navigate('ExamesRealizados')}>
             <Image source={require('../assets/images/exames.png')} style={styles.categoryImage} />
             <Text style={styles.categoryText}>Exames</Text>
           </TouchableOpacity>
@@ -62,7 +63,7 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.warningContainer}>
         <Image source={require('../assets/images/lightbulb.png')} style={styles.warningIcon} />
         <Text style={styles.warningText}>
-        Agende consultas regularmente, gerencie seus medicamentos, monitore indicadores de saúde e acompanhe os resultados de exames. Ao manter esses aspectos sob controle, você está investindo no seu bem-estar e prevenindo complicações futuras. Priorize sua saúde, consulte seu médico regularmente e siga suas orientações para uma vida mais saudável e equilibrada.
+          Agende consultas regularmente, gerencie seus medicamentos, monitore indicadores de saúde e acompanhe os resultados de exames. Ao manter esses aspectos sob controle, você está investindo no seu bem-estar e prevenindo complicações futuras. Priorize sua saúde, consulte seu médico regularmente e siga suas orientações para uma vida mais saudável e equilibrada.
         </Text>
       </View>
     </ScrollView>
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    borderTopWidth: 50, 
+    borderTopWidth: 50,
     borderTopColor: '#61A186',
   },
   header: {
@@ -123,23 +124,22 @@ const styles = StyleSheet.create({
   categories: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    alignItems: 'center', // Centraliza o conteúdo horizontalmente
+    alignItems: 'center',
   },
   categoryTitle: {
     fontSize: 21,
     fontWeight: 'bold',
     marginBottom: 10,
     padding: 20,
-    // color: '#61A186'
   },
   categoryGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between', // Espaço entre os itens
+    justifyContent: 'space-between',
   },
   categoryItem: {
-    width: '45%', 
-    height: 140, 
+    width: '45%',
+    height: 140,
     backgroundColor: '#E0E0E0',
     padding: 15,
     borderRadius: 20,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     borderColor: '#f5c6cb',
     borderWidth: 1,
     marginTop: 0,
-    maxWidth: '90%', 
+    maxWidth: '90%',
     alignSelf: 'center',
   },
   warningIcon: {

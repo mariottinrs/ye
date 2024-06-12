@@ -4,7 +4,6 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../LoginScreen';
 import AfericoesScreen from '../screens/AfericoesScreen';
 import ConsultasScreen from '../screens/ConsultasScreen';
-import ExamesRealizados from '../screens/ExamesScreen';
 import CadastroScreen from '../screens/CadastroScreen';
 import SenhaScreen from '../screens/SenhaScreen';
 import CalculoIMC from '../screens/CalculoIMC';
@@ -16,6 +15,8 @@ import Introducao2 from '../screens/Introducao2';
 import Introducao3 from '../screens/Introducao3';
 import Introducao4 from '../screens/Introducao4'; 
 import Introducao5 from '../screens/Introducao5'; 
+import ResultadoExame from '../screens/ResultadoExames';
+import ExamesRealizados from '../screens/ExamesRealizados';
 
 const Stack = createStackNavigator();
 
@@ -31,7 +32,7 @@ export default function StackNavigator() {
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Afericoes" component={AfericoesScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Consultas" component={ConsultasScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Exames" component={ExamesRealizados} options={{ headerShown: false }} />
+      <Stack.Screen name="ExamesRealizados" component={ExamesRealizados} options={{ headerShown: false }} />
       <Stack.Screen name="Cadastro" component={CadastroScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Senha" component={SenhaScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CalculoIMC" component={CalculoIMC} options={{ headerShown: false }} />
@@ -41,3 +42,4 @@ export default function StackNavigator() {
     </Stack.Navigator>
   );
 }
+
